@@ -28,32 +28,38 @@ struct WeatherManager{
             //completionHandler like callbacks if there is a problem or delays
             //completion handler will be called after the task is finished
             //after that we will be able to access the data and the response and the error
-            let task = session.dataTask(with: url, completionHandler: handle(data:response:error:))
             
+            //creating closure
+            let task = session.dataTask(with: url) { (data, response, error) in
+                //handling the response and getting the data
+                //checking an error if there is then quit from this method
+                if error != nil{
+                    print(error!)
+                    return
+                }
+                // checking the data
+                if let safeData = data {
+                    //parsing the data to json object
+                    //must include self. because we are inside a closure because swift get confused here 'rule inside any closure '
+                    self.parseJSON(weatherData: safeData)
+                }
+            }
             //starting the task
             task.resume()
             
         }
     }
-    
-    //handling the response and getting the data
-    func handle(data:Data? , response:URLResponse?, error:Error?){
-        //checking an error if there is then quit from this method
-        if error != nil{
-            print(error!)
-            return
+    func parseJSON(weatherData:Data){
+        let decoder = JSONDecoder()
+        //which is the WeatherData is decodable
+        do{
+            //trying to decode the data
+            let decodedData =  try decoder.decode(WeatherData.self,from: weatherData)
+            print(decodedData.weather[0].description)
+        }catch {
+            print(error)
         }
-        // checking the data
-        if let safeData = data {
-            //converting the data to string using .utf8 encoding
-            let dataString = String(data: safeData, encoding:.utf8)
-            print(dataString ?? "no data")
-        }
-        
-            
-        
-        
-        
     }
+    
     
 }
