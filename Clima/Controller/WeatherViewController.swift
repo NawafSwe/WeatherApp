@@ -5,6 +5,8 @@
 //  Created by Nawaf B Al sharqi on 12/11/1441 AH.
 //  Copyright © 1441 App Brewery. All rights reserved.
 //
+//
+//
 import UIKit
 
 class WeatherViewController: UIViewController, UITextFieldDelegate {
@@ -15,8 +17,8 @@ class WeatherViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var searchTextField: UITextField!
     
     
-    //values
-    var cityName:String?
+    //declaring the weatherManager
+    var weatherManager = WeatherManager()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,14 +38,6 @@ class WeatherViewController: UIViewController, UITextFieldDelegate {
         searchTextField.endEditing(true)
         return true
     }
-    //after ending the editing will clear the field
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        //take the value here
-        cityName = textField.text!
-        textField.text = ""
-        textField.placeholder = "search"
-        
-    }
     
     // checking if the user type or not to end editing or not
     func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
@@ -54,6 +48,19 @@ class WeatherViewController: UIViewController, UITextFieldDelegate {
             return false
         }
     }
+    
+    //after ending the editing will clear the field
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        //take the value here
+        //and making sure that there is no nil
+        if let cityName = textField.text{
+            weatherManager.fetchWeather(cityName: cityName)
+            }
+        searchTextField.text = ""
+        searchTextField.placeholder = "search"
+        
+    }
+    
     
     
 }
