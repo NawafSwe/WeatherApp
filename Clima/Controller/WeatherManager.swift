@@ -19,12 +19,18 @@ struct WeatherManager{
     // using the delegate design pattern
     var delegate: WeatherManagerDelegate?
     
-    func fetchWeather(cityName:String){
+    //fetching weather by city name
+    func fetchWeatherByCityName(cityName:String){
         let urlString:String = "\(self.weatherUrl)&q=\(cityName)"
         performRequest(with: urlString)
-        
-    }
+        }
     
+    
+    //getting the weather of the current user location
+    func fetchWeatherByLocation(latitude:Double, longitude:Double){
+        let urlString :String = "\(self.weatherUrl)&lat=\(latitude)&lon=\(longitude)"
+        performRequest(with: urlString)
+        }
     //using with make more sense
     func performRequest(with urlString:String){
         //to make sure there is no nil
