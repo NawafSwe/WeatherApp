@@ -21,9 +21,6 @@ class WeatherViewController: UIViewController{
     //declaring the weatherManager
     var weatherManager  = WeatherManager()
     let locationManager = CLLocationManager()
-    var lon : Double!
-    var lat : Double!
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         //its like making the searchTextField as a listener to any changes that it will announce it to the WeatherViewController
@@ -35,7 +32,7 @@ class WeatherViewController: UIViewController{
         
         //request from the user and take a permission
         locationManager.requestWhenInUseAuthorization()
-        //requesting the location after taking the permission
+        // getting the location after taking the permission
         locationManager.requestLocation()
     }
     
@@ -43,9 +40,10 @@ class WeatherViewController: UIViewController{
         searchTextField.endEditing(true)
     }
     
-    // if user want to return to his weather current location 
+    // if user want to return to his weather current location
     @IBAction func locationButton(_ sender: UIButton) {
-        weatherManager.fetchWeatherByLocation(latitude: lat, longitude: lon)
+        //re request the location to get the data and by this it will fair the fetch weather by location method 
+        locationManager.requestLocation()
     }
     
     
@@ -116,12 +114,15 @@ extension WeatherViewController : CLLocationManagerDelegate{
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]){
         // getting the last location which is the most accurate one
         if let location = locations.last{
+            //if we found one we tell the location to stop updating
+            locationManager.stopUpdatingLocation()
+            
             //example of the output <+37.78583400,-122.40641700> +/- 5.00m (speed -1.00 mps / course -1.00) @ 7/4/20, 4:20:56 PM Arabian Standard Time
             //we can from here fetching the current city name and the weather from this data by using longitude and latitude
             //CLLocationCoordinate2D(latitude: 37.785834, longitude: -122.406417) by using location.coordinate
             //next we will fetch the weather data for the current location of the user
-             lat = location.coordinate.latitude
-             lon = location.coordinate.longitude
+            let lat = location.coordinate.latitude
+            let lon = location.coordinate.longitude
             
             
             //it will trigger the didWeatherUpdate and will fetch the data and displayIt first
