@@ -9,7 +9,7 @@
 //
 import UIKit
 
-class WeatherViewController: UIViewController, UITextFieldDelegate, WeatherManagerDelegate{
+class WeatherViewController: UIViewController{
     
     @IBOutlet weak var conditionImageView: UIImageView!
     @IBOutlet weak var temperatureLabel: UILabel!
@@ -32,6 +32,12 @@ class WeatherViewController: UIViewController, UITextFieldDelegate, WeatherManag
     }
     
     
+}
+
+
+// a way to refactor and using the separation of concerns
+//Note: UITextFieldDelegate methods are optionals which has a default behavior 
+extension WeatherViewController : UITextFieldDelegate{
     //NOTE: the param textFiled is a reference for the searchTextField
     //this is to make the return key works
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -63,17 +69,19 @@ class WeatherViewController: UIViewController, UITextFieldDelegate, WeatherManag
         
     }
     
+}
+
+extension WeatherViewController : WeatherManagerDelegate{
+    
+    
     // will listen for any fetching weather data
     func didUpdateWeather(_ weatherManager: WeatherManager ,  weather:WeatherModel){
         //waiting for the response
         DispatchQueue.main.async{
             self.conditionImageView.image = UIImage(systemName: weather.conditionName)
             self.temperatureLabel.text = weather.temperatureString
-            
-            
-        }
+            }
     }
-    
     func didFailWithError(_ weatherManager: WeatherManager,error:Error!){
         print(error!)
         
