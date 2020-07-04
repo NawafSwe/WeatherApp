@@ -35,8 +35,9 @@ class WeatherViewController: UIViewController{
 }
 
 
+// MARK:- UITextFieldDelegate
 // a way to refactor and using the separation of concerns
-//Note: UITextFieldDelegate methods are optionals which has a default behavior 
+//Note: UITextFieldDelegate methods are optionals which has a default behavior
 extension WeatherViewController : UITextFieldDelegate{
     //NOTE: the param textFiled is a reference for the searchTextField
     //this is to make the return key works
@@ -71,9 +72,9 @@ extension WeatherViewController : UITextFieldDelegate{
     
 }
 
+
+// MARK:- WeatherManagerDelegate
 extension WeatherViewController : WeatherManagerDelegate{
-    
-    
     // will listen for any fetching weather data
     func didUpdateWeather(_ weatherManager: WeatherManager ,  weather:WeatherModel){
         //waiting for the response
