@@ -6,12 +6,15 @@
 //  Copyright © 1441 Nawaf.com. All rights reserved.
 //
 
+//this is the final format I want -->  cleaner
 import Foundation
 struct WeatherModel {
     let conditionId: Int
     let cityName : String
     let temperature : Float
-    
+    var temperatureString : String{
+        return String(format:"%.1f",temperature)
+    }
     
     //computed property
     var   conditionName : String {

@@ -7,9 +7,11 @@
 //
 
 import Foundation
+
+//filtering the data from the response
 //Decodable is a protocol
 //main is an object that holds the temp value so this is the way to extract data
-struct WeatherData : Decodable{
+struct WeatherData : Codable{
     let name : String
     let main: Main
     let weather : [Weather]
@@ -17,11 +19,11 @@ struct WeatherData : Decodable{
 
 // we have to provide  it decodable protocol
 //we have make the names matches the response
-struct Main : Decodable{
+struct Main : Codable{
     let temp: Float
 }
 
-struct Weather :Decodable{
+struct Weather :Codable{
     let id : Int
 }
 

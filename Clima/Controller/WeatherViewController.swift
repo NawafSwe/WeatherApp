@@ -9,7 +9,7 @@
 //
 import UIKit
 
-class WeatherViewController: UIViewController, UITextFieldDelegate {
+class WeatherViewController: UIViewController, UITextFieldDelegate, WeatherManagerDelegate{
     
     @IBOutlet weak var conditionImageView: UIImageView!
     @IBOutlet weak var temperatureLabel: UILabel!
@@ -18,12 +18,13 @@ class WeatherViewController: UIViewController, UITextFieldDelegate {
     
     
     //declaring the weatherManager
-    var weatherManager = WeatherManager()
+    var weatherManager  = WeatherManager()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         //its like making the searchTextField as a listener to any changes that it will announce it to the WeatherViewController
         searchTextField.delegate = self
+        weatherManager.delegate = self
     }
     
     @IBAction func searchButtonPressed(_ sender: UIButton) {
@@ -42,6 +43,7 @@ class WeatherViewController: UIViewController, UITextFieldDelegate {
     // checking if the user type or not to end editing or not
     func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
         if textField.text != ""{
+            cityLabel.text = textField.text
             return true
         }else{
             textField.placeholder = "type city name please"
@@ -55,13 +57,28 @@ class WeatherViewController: UIViewController, UITextFieldDelegate {
         //and making sure that there is no nil
         if let cityName = textField.text{
             weatherManager.fetchWeather(cityName: cityName)
-            }
+        }
         searchTextField.text = ""
         searchTextField.placeholder = "search"
         
     }
     
+    // will listen for any fetching weather data
+    func didUpdateWeather(_ weatherManager: WeatherManager ,  weather:WeatherModel){
+        //waiting for the response
+        DispatchQueue.main.async{
+            self.conditionImageView.image = UIImage(systemName: weather.conditionName)
+            self.temperatureLabel.text = weather.temperatureString
+            
+            
+        }
+    }
     
+    func didFailWithError(_ weatherManager: WeatherManager,error:Error!){
+        print(error!)
+        
+        
+    }
     
 }
 
